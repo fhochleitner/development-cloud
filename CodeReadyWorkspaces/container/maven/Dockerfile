@@ -8,4 +8,4 @@ RUN mkdir /.m2  && chgrp -R 0 /.m2 && \
 ENTRYPOINT /bin/bash
 
 
-#current-tag: fhochleitner/maven3.6.3-jdk8-ocp
+#current-tag: fhochleitner/maven:3.6.3-jdk8-ocp

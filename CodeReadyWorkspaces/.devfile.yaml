@@ -1,0 +1,57 @@
+metadata:
+  name: felix-bootcamp-playground
+projects:
+  - name: Hogarama
+    source:
+      location: 'https://github.com/gepardec/hogarama.git'
+      type: github
+      branch: master
+components:
+  - mountSources: true
+#    command:
+#      - sleep
+#      - infinity
+    memoryLimit: 2024Mi
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /root/.m2
+    image: 'fhochleitner/maven:3.6.3-jdk8-ocp'
+    alias: maven
+    env:
+      - value: >-
+          -Xmx1000m -XX:+UseParallelGC -Xms500m
+          -Djava.security.egd=file:/dev/./urandom
+        name: MAVEN_OPTS
+  - id: ms-kubernetes-tools/vscode-kubernetes-tools/latest
+    type: chePlugin
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: redhat/java8/latest
+    type: chePlugin
+  - id: redhat/dependency-analytics/latest
+    type: chePlugin
+apiVersion: 1.0.0
+commands:
+  - name: 1. Build
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/Hogarama/Hogajama'
+        type: exec
+        command: mvn clean install
+        component: maven
+  - name: Debug (Attach)
+    actions:
+      - referenceContent: |
+          {
+          "version": "0.2.0",
+          "configurations": [
+          {
+              "type": "java",
+              "request": "attach",
+              "name": "Debug (Attach)",
+              "hostName": "localhost",
+              "port": 8000
+          }
+          ]
+          }
+        type: vscode-launch

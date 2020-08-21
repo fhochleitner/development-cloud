@@ -7,6 +7,11 @@ projects:
       location: 'https://github.com/gepardec/hogarama.git'
       type: github
       branch: master
+  - name: development
+    source:
+      location: 'https://github.com/fhochleitner/development-cloud.git'
+      type: github
+      branch: master
 components:
   - alias: kube-tools
     image: 'fhochleitner/kube-tools:dev'
@@ -27,10 +32,21 @@ commands:
     actions:
       - component: kube-tools
         command: './install-pg.sh'
-        workdir: '${CHE_PROJECTS_ROOT}/Hogarama/OpenShift3/Templates/postgres'
+        workdir: '${CHE_PROJECTS_ROOT}/development/CodeReadyWorkspaces/components/postgresql/'
+        type: exec
+  - name: Install MongoDB
+    actions:
+      - component: kube-tools
+        command: './install-mongodb.sh'
+        workdir: '${CHE_PROJECTS_ROOT}/development/CodeReadyWorkspaces/components/mongodb/'
         type: exec
   - name: Tear-Down Postgres
     actions:
       - component: kube-tools
         command: 'helm uninstall postgresql'
+        type: exec
+  - name: Tear-Down MongoDB
+    actions:
+      - component: kube-tools
+        command: 'helm uninstall mongodb'
         type: exec

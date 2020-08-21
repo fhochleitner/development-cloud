@@ -29,3 +29,8 @@ commands:
         command: './install-pg.sh'
         workdir: '${CHE_PROJECTS_ROOT}/Hogarama/OpenShift3/Templates/postgres'
         type: exec
+  - name: Tear-Down Postgres
+    actions:
+      - component: kube-tools
+        command: 'helm uninstall postgresql'
+        type: exec
